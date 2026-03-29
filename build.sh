@@ -80,7 +80,7 @@ echo "🔏 Signing APK..."
   --ks debug.keystore \
   --ks-pass pass:android \
   --key-pass pass:android \
-  --ks-key-alias androiddebugkey \
+  --ks-key-alias debug \
   --out "$OUT/retrohandheld.apk" \
   "$OUT/retrohandheld.aligned.apk"
 
