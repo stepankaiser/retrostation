@@ -532,10 +532,11 @@ public class ConsoleBridge {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot -p"}).waitFor();
+                    // Works on non-rooted Android devices
+                    Runtime.getRuntime().exec(new String[]{"svc", "power", "shutdown"}).waitFor();
                 } catch (Exception e) {
                     try {
-                        Runtime.getRuntime().exec(new String[]{"sh", "-c", "reboot -p"}).waitFor();
+                        Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot -p"}).waitFor();
                     } catch (Exception e2) {
                         android.util.Log.e("RetroStation", "Shutdown failed: " + e2.getMessage());
                     }
@@ -549,10 +550,10 @@ public class ConsoleBridge {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot"}).waitFor();
+                    Runtime.getRuntime().exec(new String[]{"svc", "power", "reboot"}).waitFor();
                 } catch (Exception e) {
                     try {
-                        Runtime.getRuntime().exec(new String[]{"sh", "-c", "reboot"}).waitFor();
+                        Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot"}).waitFor();
                     } catch (Exception e2) {
                         android.util.Log.e("RetroStation", "Reboot failed: " + e2.getMessage());
                     }
