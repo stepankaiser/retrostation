@@ -527,6 +527,40 @@ public class ConsoleBridge {
         }
     }
 
+    @JavascriptInterface
+    public void shutdownDevice() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot -p"}).waitFor();
+                } catch (Exception e) {
+                    try {
+                        Runtime.getRuntime().exec(new String[]{"sh", "-c", "reboot -p"}).waitFor();
+                    } catch (Exception e2) {
+                        android.util.Log.e("RetroStation", "Shutdown failed: " + e2.getMessage());
+                    }
+                }
+            }
+        }).start();
+    }
+
+    @JavascriptInterface
+    public void rebootDevice() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot"}).waitFor();
+                } catch (Exception e) {
+                    try {
+                        Runtime.getRuntime().exec(new String[]{"sh", "-c", "reboot"}).waitFor();
+                    } catch (Exception e2) {
+                        android.util.Log.e("RetroStation", "Reboot failed: " + e2.getMessage());
+                    }
+                }
+            }
+        }).start();
+    }
+
     private static String escapeJson(String s) {
         if (s == null) return "";
         return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
