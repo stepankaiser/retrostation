@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RetroHandheld</string>
+    <string name="accessibility_desc">Allows RetroStation to open the power menu for shutdown and reboot.</string>
 </resources>

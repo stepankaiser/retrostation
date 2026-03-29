@@ -529,37 +529,40 @@ public class ConsoleBridge {
 
     @JavascriptInterface
     public void shutdownDevice() {
-        new Thread(new Runnable() {
+        android.util.Log.d("RetroStation", "shutdownDevice() called");
+        activity.runOnUiThread(new Runnable() {
             public void run() {
-                try {
-                    // Works on non-rooted Android devices
-                    Runtime.getRuntime().exec(new String[]{"svc", "power", "shutdown"}).waitFor();
-                } catch (Exception e) {
-                    try {
-                        Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot -p"}).waitFor();
-                    } catch (Exception e2) {
-                        android.util.Log.e("RetroStation", "Shutdown failed: " + e2.getMessage());
-                    }
+                if (PowerAccessibilityService.isEnabled()) {
+                    PowerAccessibilityService.showPowerDialog();
+                } else {
+                    // Open Accessibility Settings so user can enable the service
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
                 }
             }
-        }).start();
+        });
     }
 
     @JavascriptInterface
     public void rebootDevice() {
-        new Thread(new Runnable() {
+        android.util.Log.d("RetroStation", "rebootDevice() called");
+        activity.runOnUiThread(new Runnable() {
             public void run() {
-                try {
-                    Runtime.getRuntime().exec(new String[]{"svc", "power", "reboot"}).waitFor();
-                } catch (Exception e) {
-                    try {
-                        Runtime.getRuntime().exec(new String[]{"su", "-c", "reboot"}).waitFor();
-                    } catch (Exception e2) {
-                        android.util.Log.e("RetroStation", "Reboot failed: " + e2.getMessage());
-                    }
+                if (PowerAccessibilityService.isEnabled()) {
+                    PowerAccessibilityService.showPowerDialog();
+                } else {
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
                 }
             }
-        }).start();
+        });
+    }
+
+    @JavascriptInterface
+    public boolean isPowerServiceEnabled() {
+        return PowerAccessibilityService.isEnabled();
     }
 
     private static String escapeJson(String s) {
